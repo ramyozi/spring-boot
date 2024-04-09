@@ -1,9 +1,11 @@
 package fr.diginamic.controllers;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import fr.diginamic.models.City;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,29 +20,59 @@ import java.util.Optional;
 @RequestMapping("/cities")
 public class CityController {
 	
-	private final List<City> cities = new ArrayList<>();
-
-    public CityController() {
+	private final List<City> villes = new ArrayList<>();
+	
+	public CityController() {
         // Initialisation avec quelques villes à des fins de test
-        cities.add(new City("Paris", 2148000));
-        cities.add(new City("Lyon", 513275));
+        villes.add(new City(1,"Paris", 1111111));
+        villes.add(new City(2, "Lyon", 2222222));
     }
 
-    // Ma requete de fetch
-    @GetMapping
-    public List<City> getCities() {
-        return cities;
+	
+	 @GetMapping
+	    public List<City> getVilles() {
+	        return villes;
+	    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<City> getVilleById(@PathVariable int id) {
+        return villes.stream()
+                .filter(ville -> ville.getId() == id)
+                .findFirst()
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Requete de création
     @PostMapping
-    public ResponseEntity<String> addCity(@RequestBody City newCity) {
-        Optional<City> existingCity = cities.stream().filter(city -> city.getName().equalsIgnoreCase(newCity.getName())).findAny();
-        if (existingCity.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La ville existe déjà");
+    public ResponseEntity<String> ajouterVille(@RequestBody City nouvelleVille) {
+        boolean exists = villes.stream().anyMatch(v -> v.getId() == nouvelleVille.getId());
+        if (exists) {
+            return ResponseEntity.badRequest().body("Une ville avec cet ID existe déjà");
         } else {
-            cities.add(newCity);
-            return ResponseEntity.ok("Ville insérée avec succès");
+            villes.add(nouvelleVille);
+            return ResponseEntity.ok("Ville ajoutée avec succès");
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> modifierVille(@PathVariable int id, @RequestBody City villeModifiee) {
+        Optional<City> villeExistante = villes.stream().filter(v -> v.getId() == id).findFirst();
+        if (villeExistante.isPresent()) {
+            villeExistante.get().setName(villeModifiee.getName());
+            villeExistante.get().setPopulation(villeModifiee.getPopulation());
+            return ResponseEntity.ok("Ville modifiée avec succès");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> supprimerVille(@PathVariable int id) {
+        boolean removed = villes.removeIf(v -> v.getId() == id);
+        if (removed) {
+            return ResponseEntity.ok("Ville supprimée avec succès");
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 }
