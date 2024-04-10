@@ -22,7 +22,7 @@ import fr.diginamic.services.CityService;
 public class CityController {
 
 	@Autowired
-	private CityService villeService;
+	private CityService cityService;
 
 	/**
 	 * Récupère la liste de toutes les villes.
@@ -30,9 +30,9 @@ public class CityController {
 	 * @return la liste des villes
 	 */
 	@GetMapping
-	public ResponseEntity<List<City>> getVilles() {
-		List<City> villes = villeService.extractVilles();
-		return ResponseEntity.ok(villes);
+	public ResponseEntity<List<City>> getCities() {
+		List<City> cities = cityService.extractCities();
+		return ResponseEntity.ok(cities);
 	}
 
 	/**
@@ -42,9 +42,9 @@ public class CityController {
 	 * @return une réponse contenant la ville ou un statut NOT FOUND
 	 */
 	@GetMapping("/{id}")
-	public ResponseEntity<City> getVilleById(@PathVariable int id) {
-		City ville = villeService.extractVille(id);
-		return ville != null ? ResponseEntity.ok(ville)
+	public ResponseEntity<City> getCityById(@PathVariable int id) {
+		City city = cityService.extractCity(id);
+		return city != null ? ResponseEntity.ok(city)
 				: ResponseEntity.notFound().build();
 	}
 
@@ -55,36 +55,36 @@ public class CityController {
 	 * @return une réponse contenant la ville ou un statut NOT FOUND
 	 */
 	@GetMapping("/name/{nom}")
-	public ResponseEntity<City> getVilleByName(@PathVariable String nom) {
-		City ville = villeService.extractVille(nom);
-		return ville != null ? ResponseEntity.ok(ville)
+	public ResponseEntity<City> getCityByName(@PathVariable String nom) {
+		City city = cityService.extractCity(nom);
+		return city != null ? ResponseEntity.ok(city)
 				: ResponseEntity.notFound().build();
 	}
 
 	/**
 	 * Ajoute une nouvelle ville à la base de données.
 	 * 
-	 * @param nouvelleVille la ville à ajouter
+	 * @param nouvelleCity la ville à créer
 	 * @return la liste mise à jour des villes
 	 */
 	@PostMapping
-	public ResponseEntity<City> ajouterVille(@RequestBody City nouvelleVille) {
-	    City savedVille = villeService.insertVille(nouvelleVille);
-	    return ResponseEntity.ok(savedVille);
+	public ResponseEntity<City> createCity(@RequestBody City nouvelleCity) {
+	    City savedCity = cityService.createCity(nouvelleCity);
+	    return ResponseEntity.ok(savedCity);
 	}
 
 	/**
-	 * Modifie les informations d'une ville existante.
+	 * Modifie les informations d'une city existante.
 	 * 
 	 * @param id            l'identifiant de la ville à modifier
-	 * @param villeModifiee les nouvelles données de la ville
+	 * @param cityModifiee les nouvelles données de la ville
 	 * @return la liste mise à jour des villes
 	 */
 	@PutMapping("/{id}")
-	public ResponseEntity<List<City>> modifierVille(@PathVariable int id,
-			@RequestBody City villeModifiee) {
-		List<City> villes = villeService.modifierVille(id, villeModifiee);
-		return ResponseEntity.ok(villes);
+	public ResponseEntity<List<City>> updateCity(@PathVariable int id,
+			@RequestBody City cityModifiee) {
+		List<City> cities = cityService.updateCity(id, cityModifiee);
+		return ResponseEntity.ok(cities);
 	}
 
 	/**
@@ -94,9 +94,20 @@ public class CityController {
 	 * @return la liste mise à jour des villes
 	 */
 	@DeleteMapping("/{id}")
-	public ResponseEntity<List<City>> supprimerVille(
+	public ResponseEntity<List<City>> deleteCity(
 			@PathVariable int id) {
-		List<City> villes = villeService.supprimerVille(id);
-		return ResponseEntity.ok(villes);
+		List<City> cities = cityService.deleteCity(id);
+		return ResponseEntity.ok(cities);
 	}
+	
+	/**
+     * Endpoint pour initialiser la base de données avec des départements et des villes prédéfinis.
+     *
+     * @return ResponseEntity avec un message de succès.
+     */
+    @PostMapping("/init")
+    public ResponseEntity<String> initializeData() {
+        cityService.initData();
+        return ResponseEntity.ok("Data initialized successfully");
+    }
 }

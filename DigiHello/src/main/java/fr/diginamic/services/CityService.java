@@ -16,17 +16,17 @@ public class CityService {
     private EntityManager em;
 
     /** Extrait toutes les villes de la base de données */
-    public List<City> extractVilles() {
+    public List<City> extractCities() {
         return em.createQuery("SELECT c FROM City c", City.class).getResultList();
     }
 
     /** Extrait une ville unique par son ID */
-    public City extractVille(int idVille) {
-        return em.find(City.class, idVille);
+    public City extractCity(int idCity) {
+        return em.find(City.class, idCity);
     }
 
     /** Extrait une ville unique par son nom */
-    public City extractVille(String nom) {
+    public City extractCity(String nom) {
         return em.createQuery("SELECT c FROM City c WHERE c.name = :name", City.class)
                  .setParameter("name", nom)
                  .getSingleResult();
@@ -34,32 +34,44 @@ public class CityService {
 
     /** Insère une nouvelle ville dans la base de données et retourne la liste de toutes les villes */
     @Transactional
-    public City insertVille(City ville) {
-        em.persist(ville);
+    public City createCity(City city) {
+        em.persist(city);
         em.flush(); 
-        return ville;
+        return city;
     }
 
     /** Modifie une ville existante et retourne la liste de toutes les villes */
     @Transactional
-    public List<City> modifierVille(int idVille, City villeModifiee) {
-        City ville = em.find(City.class, idVille);
-        if (ville != null) {
-            ville.setName(villeModifiee.getName());
-            ville.setPopulation(villeModifiee.getPopulation());
-            em.merge(ville);
+    public List<City> updateCity(int idCity, City cityModifiee) {
+        City city = em.find(City.class, idCity);
+        if (city != null) {
+            city.setName(cityModifiee.getName());
+            city.setPopulation(cityModifiee.getPopulation());
+            em.merge(city);
         }
-        return extractVilles();
+        return extractCities();
     }
 
     /** Supprime une ville de la base de données et retourne la liste de toutes les villes */
     @Transactional
-    public List<City> supprimerVille(int idVille) {
-        City ville = em.find(City.class, idVille);
-        if (ville != null) {
-            em.remove(ville);
+    public List<City> deleteCity(int idCity) {
+        City city = em.find(City.class, idCity);
+        if (city != null) {
+            em.remove(city);
         }
-        return extractVilles();
+        return extractCities();
     }
 
+    /**
+	 * Initialise les données de départements et de villes.
+	 */
+	@Transactional
+	public void initData() {
+
+		createCity(new City("Paris", 2133111));
+		createCity(new City("Marseille", 873076));
+		createCity(new City("Toulouse", 479553));
+	}
+
+	
 }
