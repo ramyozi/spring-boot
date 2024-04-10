@@ -1,5 +1,7 @@
 package fr.diginamic.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,9 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import fr.diginamic.models.City;
 import fr.diginamic.services.CityService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/cities")
@@ -69,10 +68,9 @@ public class CityController {
 	 * @return la liste mise à jour des villes
 	 */
 	@PostMapping
-	public ResponseEntity<List<City>> ajouterVille(
-			@RequestBody City nouvelleVille) {
-		List<City> villes = villeService.insertVille(nouvelleVille);
-		return ResponseEntity.ok(villes);
+	public ResponseEntity<City> ajouterVille(@RequestBody City nouvelleVille) {
+	    City savedVille = villeService.insertVille(nouvelleVille);
+	    return ResponseEntity.ok(savedVille);
 	}
 
 	/**

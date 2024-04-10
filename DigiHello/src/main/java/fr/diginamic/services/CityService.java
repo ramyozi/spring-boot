@@ -7,7 +7,9 @@ import jakarta.transaction.Transactional;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
 
+@Service
 public class CityService {
 
     @PersistenceContext
@@ -32,9 +34,10 @@ public class CityService {
 
     /** Insère une nouvelle ville dans la base de données et retourne la liste de toutes les villes */
     @Transactional
-    public List<City> insertVille(City ville) {
+    public City insertVille(City ville) {
         em.persist(ville);
-        return extractVilles();
+        em.flush(); 
+        return ville;
     }
 
     /** Modifie une ville existante et retourne la liste de toutes les villes */

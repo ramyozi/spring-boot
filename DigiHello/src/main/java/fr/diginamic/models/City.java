@@ -8,7 +8,11 @@ public class City {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    
+    @Column(length = 100, nullable = false)
     private String name;
+
+    @Column(nullable = false)
     private int population;
     
     
@@ -21,34 +25,17 @@ public class City {
 	}
 
 	/** Constructeur
-	 * @param id
 	 * @param name
 	 * @param population
 	 */
-	public City(int id, String name, int population) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.population = population;
-	}
-
+	public City(String name, int population) {
+        super();
+        this.name = name;
+        this.population = population;
+    }
 	@Override
 	public String toString() {
 		return "city [name=" + name + ", population=" + population + "]";
-	}
-
-	/** Getter
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
-	}
-
-	/** Setter
-	 * @param id the id to set
-	 */
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	/** Getter
