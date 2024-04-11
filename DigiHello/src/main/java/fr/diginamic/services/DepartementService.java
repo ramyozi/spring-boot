@@ -18,10 +18,19 @@ public class DepartementService {
     @PersistenceContext
     private EntityManager em;
 
+    public Departement findDepartementByCode(String code) {
+        List<Departement> departments = em.createQuery("SELECT d FROM Departement d WHERE d.code = :code", Departement.class)
+                                          .setParameter("code", code)
+                                          .getResultList();
+        if (departments.isEmpty()) {
+            return null;
+        }
+        return departments.get(0);
+    }
+
     @Transactional
     public Departement saveDepartement(Departement departement) {
         em.persist(departement);
-        em.flush();
         return departement;
     }
 
@@ -32,7 +41,7 @@ public class DepartementService {
         if (departement != null) {
             DepartementDto dto = new DepartementDto();
             dto.setCode(departement.getCode());
-            dto.setName(departement.getNom());
+            dto.setName(departement.getName());
             dto.setPopulation(departement.getVilles().stream().mapToInt(City::getPopulation).sum());
             return dto;
         }
@@ -45,7 +54,7 @@ public class DepartementService {
                                     .setParameter("code", code)
                                     .getResultList().stream().findFirst().orElse(null);
         if (departement != null) {
-            departement.setNom(newDepartementData.getNom());
+            departement.setName(newDepartementData.getName());
             departement.setCode(newDepartementData.getCode());
             em.merge(departement);
         }
@@ -69,7 +78,7 @@ public class DepartementService {
         return departements.stream().map(d -> {
             DepartementDto dto = new DepartementDto();
             dto.setCode(d.getCode());
-            dto.setName(d.getNom());
+            dto.setName(d.getName());
             dto.setPopulation(d.getVilles().stream().mapToInt(City::getPopulation).sum());
             return dto;
         }).collect(Collectors.toList());

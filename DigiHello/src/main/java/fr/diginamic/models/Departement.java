@@ -12,7 +12,7 @@ public class Departement {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column(length = 100, nullable = false)
-	private String nom;
+	private String name;
 	@Column(length = 10, nullable = false, unique = true)
 	private String code;
 	
@@ -23,18 +23,18 @@ public class Departement {
 	public Departement() {
 	}
 
-	public Departement(String nom, String code) {
-		this.nom = nom;
+	public Departement(String name, String code) {
+		this.name = name;
 		this.code = code;
 	}
 
 	// Getters and Setters
-	public String getNom() {
-		return nom;
+	public String getName() {
+		return name;
 	}
 
-	public void setNom(String nom) {
-		this.nom = nom;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getCode() {

@@ -38,26 +38,37 @@ public class CityService {
 						City.class)
 				.setParameter("name", nom).getSingleResult();
 	}
-	
-    @Transactional
-    public CityDto getCityDtoById(int idCity) {
-        City city = em.find(City.class, idCity);
-        return city != null ? CityMapper.cityToDto(city) : null;
-    }
-
-    @Transactional
-    public List<CityDto> getAllCityDtos() {
-        List<City> cities = em.createQuery("SELECT c FROM City c", City.class).getResultList();
-        return cities.stream().map(CityMapper::cityToDto).collect(Collectors.toList());
-    }
-
 
 	@Transactional
-	public City createCity(City city) {
-		em.persist(city);
-		em.flush();
-		return city;
+	public CityDto getCityDtoById(int idCity) {
+		City city = em.find(City.class, idCity);
+		return city != null ? CityMapper.cityToDto(city) : null;
 	}
+
+	@Transactional
+	public List<CityDto> getAllCityDtos() {
+		List<City> cities = em
+				.createQuery("SELECT c FROM City c", City.class)
+				.getResultList();
+		return cities.stream().map(CityMapper::cityToDto)
+				.collect(Collectors.toList());
+	}
+
+	@Transactional
+    public City createCity(City city) {
+        if (city.getDepartement() != null && city.getDepartement().getCode() != null) {
+            Departement dep = departementService.findDepartementByCode(city.getDepartement().getCode());
+            if (dep == null) {
+                throw new IllegalStateException("Department not found");
+            }
+            city.setDepartement(dep); 
+        } else {
+            throw new IllegalStateException("Department code must be provided");
+        }
+        em.persist(city);
+        em.flush();
+        return city;
+    }
 
 	@Transactional
 	public List<City> updateCity(int idCity, City cityModifiee) {
@@ -92,22 +103,21 @@ public class CityService {
 		createCity(new City("Marseille", 2222222, dep13));
 		createCity(new City("Toulouse", 333333, dep31));
 	}
-	
-	@Transactional
-	public List<City> findTopNCitiesByDepartment(Long depId, int n) {
-	    return em.createQuery("SELECT c FROM City c WHERE c.departement.id = :depId ORDER BY c.population DESC", City.class)
-	             .setParameter("depId", depId)
-	             .setMaxResults(n)
-	             .getResultList();
+
+	public List<City> getTopNCitiesByDepartment(String depCode, int n) {
+		return em.createQuery(
+				"SELECT c FROM City c WHERE c.departement.code = :depCode ORDER BY c.population DESC",
+				City.class).setParameter("depCode", depCode)
+				.setMaxResults(n).getResultList();
 	}
 
-	@Transactional
-	public List<City> findCitiesByPopulationRangeAndDepartment(Long depId, int minPopulation, int maxPopulation) {
-	    return em.createQuery("SELECT c FROM City c WHERE c.departement.id = :depId AND c.population BETWEEN :min AND :max ORDER BY c.population", City.class)
-	             .setParameter("depId", depId)
-	             .setParameter("min", minPopulation)
-	             .setParameter("max", maxPopulation)
-	             .getResultList();
+	public List<City> getCitiesByPopulationRangeAndDepartment(
+			String depCode, int minPopulation, int maxPopulation) {
+		return em.createQuery(
+				"SELECT c FROM City c WHERE c.departement.code = :depCode AND c.population BETWEEN :min AND :max ORDER BY c.population",
+				City.class).setParameter("depCode", depCode)
+				.setParameter("min", minPopulation)
+				.setParameter("max", maxPopulation).getResultList();
 	}
 
 }

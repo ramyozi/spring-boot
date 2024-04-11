@@ -10,7 +10,7 @@ public class CityMapper {
         dto.setCityCode(String.valueOf(city.getId()));
         dto.setPopulation(city.getPopulation());
         dto.setDepartementCode(city.getDepartement().getCode());
-        dto.setDepartementName(city.getDepartement().getNom());
+        dto.setDepartementName(city.getDepartement().getName());
         return dto;
     }
 }
