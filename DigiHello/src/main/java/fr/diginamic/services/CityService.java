@@ -92,16 +92,42 @@ public class CityService {
 
 	@Transactional
 	public void initData() {
-		Departement dep75 = departementService
-				.saveDepartement(new Departement("Paris", "75"));
-		Departement dep13 = departementService.saveDepartement(
-				new Departement("Bouches-du-Rhône", "13"));
-		Departement dep31 = departementService
-				.saveDepartement(new Departement("Haute-Garonne", "31"));
+		 Departement dep75 = departementService.saveDepartement(new Departement("Paris", "75"));
+	        Departement dep13 = departementService.saveDepartement(new Departement("Bouches-du-Rhône", "13"));
+	        Departement dep31 = departementService.saveDepartement(new Departement("Haute-Garonne", "31"));
 
-		createCity(new City("Paris", 1111111, dep75));
-		createCity(new City("Marseille", 2222222, dep13));
-		createCity(new City("Toulouse", 333333, dep31));
+	        createCity(new City("Paris", 2148000, dep75));
+	        createCity(new City("Boulogne-Billancourt", 120645, dep75));
+	        createCity(new City("Montreuil", 109043, dep75));
+	        createCity(new City("Saint-Denis", 111354, dep75));
+	        createCity(new City("Nanterre", 95278, dep75));
+	        createCity(new City("Créteil", 90289, dep75));
+	        createCity(new City("Versailles", 85416, dep75));
+	        createCity(new City("Courbevoie", 81735, dep75));
+	        createCity(new City("Vitry-sur-Seine", 79315, dep75));
+	        createCity(new City("Colombes", 85453, dep75));
+
+	        createCity(new City("Marseille", 861635, dep13));
+	        createCity(new City("Aix-en-Provence", 143006, dep13));
+	        createCity(new City("Arles", 52949, dep13));
+	        createCity(new City("Martigues", 48617, dep13));
+	        createCity(new City("Aubagne", 46853, dep13));
+	        createCity(new City("Istres", 42753, dep13));
+	        createCity(new City("Salon-de-Provence", 45274, dep13));
+	        createCity(new City("Vitrolles", 34687, dep13));
+	        createCity(new City("Marignane", 33820, dep13));
+	        createCity(new City("La Ciotat", 34395, dep13));
+
+	        createCity(new City("Toulouse", 471941, dep31));
+	        createCity(new City("Colomiers", 38997, dep31));
+	        createCity(new City("Tournefeuille", 29175, dep31));
+	        createCity(new City("Muret", 24853, dep31));
+	        createCity(new City("Blagnac", 24477, dep31));
+	        createCity(new City("Plaisance-du-Touch", 17685, dep31));
+	        createCity(new City("Cugnaux", 16814, dep31));
+	        createCity(new City("Balma", 15823, dep31));
+	        createCity(new City("L'Union", 12345, dep31));
+	        createCity(new City("Ramonville-Saint-Agne", 11584, dep31));
 	}
 
 	public List<City> getTopNCitiesByDepartment(String depCode, int n) {
