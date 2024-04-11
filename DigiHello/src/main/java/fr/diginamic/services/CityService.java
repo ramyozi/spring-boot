@@ -1,12 +1,14 @@
 package fr.diginamic.services;
 
 import fr.diginamic.models.City;
+import fr.diginamic.models.Departement;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +16,10 @@ public class CityService {
 
     @PersistenceContext
     private EntityManager em;
+    
+	@Autowired
+	private DepartementService departementService;
+
 
     /** Extrait toutes les villes de la base de données */
     public List<City> extractCities() {
@@ -68,9 +74,16 @@ public class CityService {
 	@Transactional
 	public void initData() {
 
-		createCity(new City("Paris", 2133111));
-		createCity(new City("Marseille", 873076));
-		createCity(new City("Toulouse", 479553));
+		Departement dep75 = departementService
+				.saveDepartement(new Departement("Paris", "75"));
+		Departement dep13 = departementService.saveDepartement(
+				new Departement("Bouches-du-Rhône", "13"));
+		Departement dep31 = departementService
+				.saveDepartement(new Departement("Haute-Garonne", "31"));
+
+		createCity(new City("Paris", 1111111, dep75));
+		createCity(new City("Marseille", 2222222, dep13));
+		createCity(new City("Toulouse", 333333, dep31));
 	}
 
 	
