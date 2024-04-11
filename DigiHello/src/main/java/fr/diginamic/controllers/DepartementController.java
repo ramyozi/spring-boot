@@ -1,74 +1,50 @@
 package fr.diginamic.controllers;
 
+import fr.diginamic.dto.DepartementDto;
 import fr.diginamic.models.City;
 import fr.diginamic.models.Departement;
 import fr.diginamic.services.CityService;
 import fr.diginamic.services.DepartementService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/departements")
 public class DepartementController {
 
-    @Autowired
+	@Autowired
     private DepartementService departementService;
 
-    @Autowired
-    private CityService cityService;
-
-    /**
-     * Crée un nouveau département.
-     *
-     * @param departement Le département à créer.
-     * @return Le département créé.
-     */
     @PostMapping
     public ResponseEntity<Departement> createDepartement(@RequestBody Departement departement) {
         Departement created = departementService.saveDepartement(departement);
         return ResponseEntity.ok(created);
     }
 
-    /**
-     * Récupère tous les départements.
-     *
-     * @return Une liste de tous les départements.
-     */
+    @GetMapping("/{code}")
+    public ResponseEntity<DepartementDto> getDepartementByCode(@PathVariable String code) {
+        DepartementDto departementDto = departementService.getDepartementDtoByCode(code);
+        return departementDto != null ? ResponseEntity.ok(departementDto) : ResponseEntity.notFound().build();
+    }
+
     @GetMapping
-    public ResponseEntity<List<Departement>> getAllDepartements() {
-        List<Departement> departements = departementService.findAllDepartements();
+    public ResponseEntity<List<DepartementDto>> getAllDepartements() {
+        List<DepartementDto> departements = departementService.getAllDepartementDtos();
         return ResponseEntity.ok(departements);
     }
 
-    /**
-     * Met à jour un département donné.
-     *
-     * @param id L'identifiant du département à mettre à jour.
-     * @param departement Les nouvelles données pour le département.
-     * @return Le département mis à jour.
-     */
-    @PutMapping("/{id}")
-    public ResponseEntity<Departement> updateDepartement(@PathVariable Long id, @RequestBody Departement departement) {
-        Departement updated = departementService.updateDepartement(id, departement);
-        return ResponseEntity.ok(updated);
+    @PutMapping("/{code}")
+    public ResponseEntity<Departement> updateDepartement(@PathVariable String code, @RequestBody Departement departement) {
+        Departement updated = departementService.updateDepartementByCode(code, departement);
+        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
 
-    /**
-     * Supprime un département.
-     *
-     * @param id L'identifiant du département à supprimer.
-     * @return Un message de succès.
-     */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteDepartement(@PathVariable Long id) {
-        departementService.deleteDepartement(id);
-        return ResponseEntity.ok("Departement deleted successfully");
+    @DeleteMapping("/{code}")
+    public ResponseEntity<String> deleteDepartement(@PathVariable String code) {
+        boolean deleted = departementService.deleteDepartementByCode(code);
+        return deleted ? ResponseEntity.ok("Departement deleted successfully") : ResponseEntity.notFound().build();
     }
-
-
 }

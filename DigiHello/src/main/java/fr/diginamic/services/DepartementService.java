@@ -1,67 +1,78 @@
 package fr.diginamic.services;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
+import fr.diginamic.dto.DepartementDto;
+import fr.diginamic.models.City;
 import fr.diginamic.models.Departement;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
 @Service
 public class DepartementService {
 
-	@PersistenceContext
-	private EntityManager em;
+    @PersistenceContext
+    private EntityManager em;
 
-	public List<Departement> findAllDepartements() {
-		return em.createQuery("SELECT d FROM Departement d",
-				Departement.class).getResultList();
-	}
+    @Transactional
+    public Departement saveDepartement(Departement departement) {
+        em.persist(departement);
+        em.flush();
+        return departement;
+    }
 
-	public Departement updateDepartement(Long id,
-			Departement newDepartementData) {
-		Departement departement = em.find(Departement.class, id);
-		if (departement != null) {
-			departement.setNom(newDepartementData.getNom());
-			departement.setCode(newDepartementData.getCode());
-			em.merge(departement);
-		}
-		return departement;
-	}
+    public DepartementDto getDepartementDtoByCode(String code) {
+        Departement departement = em.createQuery("SELECT d FROM Departement d WHERE d.code = :code", Departement.class)
+                                    .setParameter("code", code)
+                                    .getResultList().stream().findFirst().orElse(null);
+        if (departement != null) {
+            DepartementDto dto = new DepartementDto();
+            dto.setCode(departement.getCode());
+            dto.setName(departement.getNom());
+            dto.setPopulation(departement.getVilles().stream().mapToInt(City::getPopulation).sum());
+            return dto;
+        }
+        return null;
+    }
 
-	public void deleteDepartement(Long id) {
-	    Departement departement = em.find(Departement.class, id);
-	    if (departement != null) {
-	        em.remove(departement);
-	    }
-	}
+    @Transactional
+    public Departement updateDepartementByCode(String code, Departement newDepartementData) {
+        Departement departement = em.createQuery("SELECT d FROM Departement d WHERE d.code = :code", Departement.class)
+                                    .setParameter("code", code)
+                                    .getResultList().stream().findFirst().orElse(null);
+        if (departement != null) {
+            departement.setNom(newDepartementData.getNom());
+            departement.setCode(newDepartementData.getCode());
+            em.merge(departement);
+        }
+        return departement;
+    }
 
-	/**
-	 * Crée un département et le persiste dans la base de données.
-	 * 
-	 * @param departement Le département à persister.
-	 * @return Le département persisté.
-	 */
-	@Transactional
-	public Departement saveDepartement(Departement departement) {
-		em.persist(departement);
-		return departement;
-	}
+    @Transactional
+    public boolean deleteDepartementByCode(String code) {
+        Departement departement = em.createQuery("SELECT d FROM Departement d WHERE d.code = :code", Departement.class)
+                                    .setParameter("code", code)
+                                    .getResultList().stream().findFirst().orElse(null);
+        if (departement != null) {
+            em.remove(departement);
+            return true;
+        }
+        return false;
+    }
 
-	/**
-	 * Recherche un département par son code.
-	 * 
-	 * @param code Le code du département.
-	 * @return Le département trouvé ou null.
-	 */
-	public Departement findDepartementByCode(String code) {
-		return em
-				.createQuery(
-						"SELECT d FROM Departement d WHERE d.code = :code",
-						Departement.class)
-				.setParameter("code", code).getResultList().stream()
-				.findFirst().orElse(null);
-	}
+    public List<DepartementDto> getAllDepartementDtos() {
+        List<Departement> departements = em.createQuery("SELECT d FROM Departement d", Departement.class).getResultList();
+        return departements.stream().map(d -> {
+            DepartementDto dto = new DepartementDto();
+            dto.setCode(d.getCode());
+            dto.setName(d.getNom());
+            dto.setPopulation(d.getVilles().stream().mapToInt(City::getPopulation).sum());
+            return dto;
+        }).collect(Collectors.toList());
+    }
+
 }

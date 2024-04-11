@@ -4,21 +4,21 @@ import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Departement {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
 	@Column(length = 100, nullable = false)
 	private String nom;
-
 	@Column(length = 10, nullable = false, unique = true)
 	private String code;
-
-    @OneToMany(mappedBy = "departement", orphanRemoval = true)
-    private Set<City> villes = new HashSet<>();
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "departement", orphanRemoval = true)
+	private Set<City> villes = new HashSet<>();
 
 	public Departement() {
 	}
@@ -28,6 +28,7 @@ public class Departement {
 		this.code = code;
 	}
 
+	// Getters and Setters
 	public String getNom() {
 		return nom;
 	}
