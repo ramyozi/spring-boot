@@ -1,15 +1,39 @@
 package fr.diginamic.controllers;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.itextpdf.io.font.constants.StandardFonts;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.property.TextAlignment;
+import com.itextpdf.layout.property.UnitValue;
+
 import fr.diginamic.dto.DepartementDto;
 import fr.diginamic.models.City;
 import fr.diginamic.models.Departement;
 import fr.diginamic.services.CityService;
 import fr.diginamic.services.DepartementService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/departements")
@@ -62,5 +86,72 @@ public class DepartementController {
     public ResponseEntity<String> deleteDepartement(@PathVariable String code) {
         boolean deleted = departementService.deleteDepartementByCode(code);
         return deleted ? ResponseEntity.ok("Departement deleted successfully") : ResponseEntity.notFound().build();
+    }
+    
+    @GetMapping("/export")
+    public ResponseEntity<byte[]> exportDepartementsCsv() {
+        List<DepartementDto> departements = departementService.getAllDepartementDtos();
+        StringBuilder csvBuilder = new StringBuilder("Department Code,Department Name\n");
+
+        for (DepartementDto departement : departements) {
+            csvBuilder.append(departement.getCode()).append(",")
+                      .append(departement.getName()).append("\n");
+        }
+
+        byte[] csvBytes = csvBuilder.toString().getBytes();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentDisposition(ContentDisposition.builder("attachment")
+                                                        .filename("departements.csv")
+                                                        .build());
+        headers.add(HttpHeaders.CONTENT_TYPE, "text/csv");
+
+        return ResponseEntity.ok()
+                             .headers(headers)
+                             .body(csvBytes);
+    }
+    
+    @GetMapping("/export/pdf")
+    public ResponseEntity<byte[]> exportDepartementsPdf() throws java.io.IOException {
+        List<DepartementDto> departements = departementService.getAllDepartementDtos();
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        PdfWriter writer = new PdfWriter(byteArrayOutputStream);
+        PdfDocument pdf = new PdfDocument(writer);
+        Document document = new Document(pdf);
+
+        PdfFont font = PdfFontFactory.createFont(StandardFonts.HELVETICA);
+        PdfFont bold = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
+
+        Paragraph header = new Paragraph("Department Report")
+                .setFont(bold)
+                .setFontSize(20)
+                .setTextAlignment(TextAlignment.CENTER);
+        document.add(header);
+
+        float[] columnWidths = {2, 3}; 
+        Table table = new Table(UnitValue.createPercentArray(columnWidths));
+        table.setWidth(UnitValue.createPercentValue(100));
+
+        table.addHeaderCell(new Paragraph("Department Code").setFont(bold));
+        table.addHeaderCell(new Paragraph("Department Name").setFont(bold));
+
+        for (DepartementDto departement : departements) {
+            table.addCell(new Paragraph(departement.getCode()).setFont(font));
+            table.addCell(new Paragraph(departement.getName()).setFont(font));
+        }
+
+        document.add(table);
+        document.close();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentDisposition(ContentDisposition.builder("attachment")
+                                                        .filename("departements.pdf")
+                                                        .build());
+        headers.add(HttpHeaders.CONTENT_TYPE, "application/pdf");
+
+        return ResponseEntity.ok()
+                             .headers(headers)
+                             .body(byteArrayOutputStream.toByteArray());
     }
 }

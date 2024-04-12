@@ -7,7 +7,7 @@ public class CityMapper {
 
     public static CityDto cityToDto(City city) {
         CityDto dto = new CityDto();
-        dto.setCityCode(String.valueOf(city.getId()));
+        dto.setName(city.getName());
         dto.setPopulation(city.getPopulation());
         dto.setDepartementCode(city.getDepartement().getCode());
         dto.setDepartementName(city.getDepartement().getName());

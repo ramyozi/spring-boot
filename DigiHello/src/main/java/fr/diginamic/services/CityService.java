@@ -20,7 +20,7 @@ public class CityService {
 	@PersistenceContext
 	private EntityManager em;
 
-	@Autowired
+	@Autowired 
 	private DepartementService departementService;
 
 	public List<City> extractCities() {

@@ -1,23 +1,12 @@
 package fr.diginamic.dto;
 
 public class CityDto {
-    private String cityCode;
+    private String name;
     private int population;
     private String departementCode;
     private String departementName;
     
-	/** Getter
-	 * @return the cityCode
-	 */
-	public String getCityCode() {
-		return cityCode;
-	}
-	/** Setter
-	 * @param cityCode the cityCode to set
-	 */
-	public void setCityCode(String cityCode) {
-		this.cityCode = cityCode;
-	}
+	
 	/** Getter
 	 * @return the population
 	 */
@@ -53,6 +42,18 @@ public class CityDto {
 	 */
 	public void setDepartementName(String departementName) {
 		this.departementName = departementName;
+	}
+	/** Getter
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+	/** Setter
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
     
     
