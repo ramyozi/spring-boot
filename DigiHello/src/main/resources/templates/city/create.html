@@ -4,6 +4,7 @@
 <head>
 	<title>Create City</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/global.css}" />
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script th:inline="javascript">
 		/*<![CDATA[*/
 		$(document).ready(function () {
@@ -13,13 +14,16 @@
 					url: '/departement/check',
 					data: {code: depCode},
 					success: function (departement) {
+						console.log('here');
 						if (departement && departement.name) {
 							$('#departementName').val(departement.name).prop('disabled', true);
 						} else {
 							$('#departementName').val('').prop('disabled', false);
 						}
+
 					},
 					error: function () {
+						console.log('here error');
 						$('#departementName').val('').prop('disabled', false);
 					}
 				});
