@@ -19,7 +19,7 @@
 			<tr th:each="show : ${shows}">
 				<td th:text="${show.title}">Show title</td>
 				<td>
-					<a th:href="@{/show/showdetails/details/{id}(id=${show.id})}">View Details</a>
+					<a th:href="@{/show/details/{id}(id=${show.id})}">View Details</a>
 				</td>
 			</tr>
 		</tbody>

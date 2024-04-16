@@ -11,10 +11,10 @@
     <div>
         <h3>Genres</h3>
         <ul>
-            <li th:each="genre : ${show.genres}" th:text="${genre.name}">Genre Name</li>
+            <li th:each="genreName : ${show.genreNames}" th:text="${genreName}">Genre Name</li>
         </ul>
     </div>
-    <a href="@{/show/list}">Back to list</a>
+    <a th:href="@{/show/list}">Back to list</a>
 </body>
 
 </html>

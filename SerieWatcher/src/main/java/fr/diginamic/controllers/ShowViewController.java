@@ -25,14 +25,15 @@ public class ShowViewController {
 	@Autowired
     private GenreService genreService;
 	
-	@GetMapping("/show/showdetails/details/{id}")
-	public ModelAndView showDetails(@PathVariable("id") int id, ModelAndView mav) {
+	@GetMapping("/show/details/{id}")
+	public ModelAndView showDetails(@PathVariable("id") int id) {
+	    ModelAndView mav = new ModelAndView();
 	    try {
 	        ShowDTO showDTO = showService.getShowById(id);
-	        mav.setViewName("show/showdetails/details"); 
+	        mav.setViewName("show/details");  
 	        mav.addObject("show", showDTO);
 	    } catch (Exception e) {
-	        mav.setViewName("error"); 
+	        mav.setViewName("error");
 	        mav.addObject("message", "Error retrieving show details: " + e.getMessage());
 	    }
 	    return mav;
