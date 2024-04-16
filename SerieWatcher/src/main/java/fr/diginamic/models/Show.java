@@ -1,5 +1,6 @@
 package fr.diginamic.models;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -7,9 +8,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "tv_show")
 public class Show {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,8 +23,13 @@ public class Show {
     @Column(length = 100, nullable = false)
     private String title;
 
-    @ManyToMany(mappedBy = "shows")
-    private Set<Genre> genres;
+    @ManyToMany
+    @JoinTable(
+        name = "show_genre",
+        joinColumns = @JoinColumn(name = "show_id"),
+        inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
+    private Set<Genre> genres = new HashSet<>();
 
     // Constructors
     public Show() {}
@@ -53,15 +63,14 @@ public class Show {
         this.genres = genres;
     }
 
-    // Add helper method to add Genre to Show
+    // Helper methods to manage bi-directional relationship
     public void addGenre(Genre genre) {
-        this.genres.add(genre);
+        genres.add(genre);
         genre.getShows().add(this);
     }
 
-    // Remove helper method to remove Genre from Show
     public void removeGenre(Genre genre) {
-        this.genres.remove(genre);
+        genres.remove(genre);
         genre.getShows().remove(this);
     }
 }

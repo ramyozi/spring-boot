@@ -1,0 +1,28 @@
+{
+  "animes": [
+    {
+      "title": "Naruto",
+      "genres": ["Action", "Adventure"]
+    },
+    {
+      "title": "Attack on Titan",
+      "genres": ["Action", "Drama", "Fantasy"]
+    },
+    {
+      "title": "My Hero Academia",
+      "genres": ["Action", "Comedy", "School"]
+    },
+    {
+      "title": "One Piece",
+      "genres": ["Action", "Adventure", "Comedy"]
+    },
+    {
+      "title": "Tokyo Ghoul",
+      "genres": ["Horror", "Mystery", "Supernatural"]
+    },
+    {
+      "title": "Sword Art Online",
+      "genres": ["Action", "Adventure", "Fantasy"]
+    }
+  ]
+}

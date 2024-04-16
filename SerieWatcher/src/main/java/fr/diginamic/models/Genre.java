@@ -1,5 +1,6 @@
 package fr.diginamic.models;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -7,11 +8,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "genre")
 public class Genre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,13 +21,8 @@ public class Genre {
     @Column(length = 100, nullable = false)
     private String name;
 
-    @ManyToMany
-    @JoinTable(
-        name = "show_genre",
-        joinColumns = @JoinColumn(name = "genre_id"),
-        inverseJoinColumns = @JoinColumn(name = "show_id")
-    )
-    private Set<Show> shows;
+    @ManyToMany(mappedBy = "genres")
+    private Set<Show> shows = new HashSet<>();
 
     // Constructors
     public Genre() {}
