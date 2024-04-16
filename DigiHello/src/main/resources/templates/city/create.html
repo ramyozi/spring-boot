@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Create City</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/global.css}" />
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		$(document).ready(function () {
+			$('#departementCode').on('change', function () {
+				var depCode = $(this).val();
+				$.ajax({
+					url: '/departement/check',
+					data: {code: depCode},
+					success: function (departement) {
+						if (departement && departement.name) {
+							$('#departementName').val(departement.name).prop('disabled', true);
+						} else {
+							$('#departementName').val('').prop('disabled', false);
+						}
+					},
+					error: function () {
+						$('#departementName').val('').prop('disabled', false);
+					}
+				});
+			});
+
+			$('#createCityForm').on('submit', function (e) {
+				e.preventDefault();
+				var depCode = $('#departementCode').val();
+				var depName = $('#departementName').val();
+
+				if ($('#departementName').prop('disabled') === false && depName === '') {
+					// If department name input is enabled and empty, prevent form submission
+					alert('Please enter a department name.');
+				} else if ($('#departementName').prop('disabled') === false) {
+					// If department name input is enabled and filled, attempt to create a new department
+					$.ajax({
+						url: '/departement/create',
+						method: 'POST',
+						contentType: 'application/json',
+						data: JSON.stringify({code: depCode, name: depName}),
+						success: function (savedDepartement) {
+							// After successful creation of the department, submit the form
+							$('#departementName').prop('disabled', true);
+							$('#createCityForm').unbind('submit').submit();
+						},
+						error: function () {
+							alert('Error creating department!');
+						}
+					});
+				} else {
+					// If department name input is disabled, proceed with form submission
+					this.submit();
+				}
+			});
+		});
+		/*]]>*/
+	</script>
+</head>
+
+<body>
+	<h1>Create New City</h1>
+	<form id="createCityForm" action="#" th:action="@{/city/add}" th:object="${city}" method="post">
+		<div>
+			<label for="name">Name:</label>
+			<input type="text" id="name" th:field="*{name}" required />
+		</div>
+
+		<div>
+			<label for="population">Population:</label>
+			<input type="number" id="population" th:field="*{population}" required />
+		</div>
+
+		<div>
+			<label for="departementCode">Department Code:</label>
+			<input type="text" id="departementCode" th:field="*{departementCode}" required />
+		</div>
+
+		<div>
+			<label for="departementName">Department Name:</label>
+			<input type="text" id="departementName" th:field="*{departementName}" disabled required />
+		</div>
+		<div>
+			<button type="submit">Create City</button>
+		</div>
+	</form>
+</body>
+
+</html>

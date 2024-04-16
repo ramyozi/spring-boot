@@ -1,7 +1,9 @@
 package fr.diginamic.mapper;
 
-import fr.diginamic.models.City;
 import fr.diginamic.dto.CityDto;
+import fr.diginamic.models.City;
+import fr.diginamic.models.Departement;
+import fr.diginamic.services.DepartementService;
 
 public class CityMapper {
 
@@ -12,5 +14,15 @@ public class CityMapper {
         dto.setDepartementCode(city.getDepartement().getCode());
         dto.setDepartementName(city.getDepartement().getName());
         return dto;
+    }
+    
+    public static City dtoToCity(CityDto cityDto, DepartementService departementService) {
+        City city = new City();
+        city.setName(cityDto.getName());
+        city.setPopulation(cityDto.getPopulation());
+        
+        Departement d = departementService.findDepartementByCode(cityDto.getDepartementCode());
+        city.setDepartement(d);
+        return city;
     }
 }
