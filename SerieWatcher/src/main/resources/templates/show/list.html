@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Cities List</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/global.css}" />
+</head>
+
+<body>
+	<h1>Shows List</h1>
+	<table>
+		<thead>
+			<tr>
+				<th>title</th>
+				<th>action</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="show : ${shows}">
+				<td th:text="${show.title}">Show title</td>
+				<td>
+					<a th:href="@{/show/showdetails/details/{id}(id=${show.id})}">View Details</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+
+</html>

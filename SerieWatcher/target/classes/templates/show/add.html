@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Create Show</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/global.css}" />
+</head>
+
+<body>
+	<h1>Create New Show</h1>
+	<form id="addShowForm" action="#" th:action="@{/show/add}" th:object="${show}" method="post">
+		<div>
+			<label for="title">Name:</label>
+			<input type="text" id="title" th:field="*{title}" required />
+		</div>
+		<div>
+			<label for="genre">Genre:</label>
+			<input list="genreList" id="genre" name="genre" />
+			<datalist id="genreList">
+				<option th:each="genre : ${genres}" th:value="${genre.name}" th:text="${genre.name}"></option>
+			</datalist>
+		</div>
+		<div>
+			<button type="submit">Create Show</button>
+		</div>
+	</form>
+</body>
+
+</html>

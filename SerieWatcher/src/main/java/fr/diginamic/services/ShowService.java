@@ -27,23 +27,26 @@ public class ShowService {
 	private GenreRepository genreRepository;
 
 	@Transactional
-    public ShowDTO createShow(ShowDTO showDTO) {
-        Show show = ShowMapper.toEntity(showDTO);
-        Set<Genre> genres = new HashSet<>();
+	public ShowDTO createShow(ShowDTO showDTO) {
+		Show show = ShowMapper.toEntity(showDTO);
+		Set<Genre> genres = new HashSet<>();
 
-        for (String genreName : showDTO.getGenreNames()) {
-            Genre genre = genreRepository.findByName(genreName);
-            if (genre == null) {
-                genre = new Genre();
-                genre.setName(genreName);
-                genre = genreRepository.save(genre);
-            }
-            show.addGenre(genre);
-        }
+		if (showDTO.getGenreNames() != null) {
+			for (String genreName : showDTO.getGenreNames()) {
+				Genre genre = genreRepository.findByName(genreName);
+				if (genre == null) {
+					genre = new Genre();
+					genre.setName(genreName);
+					genre = genreRepository.save(genre);
+				}
+				genres.add(genre);
+			}
+		}
 
-        show = showRepository.save(show);
-        return ShowMapper.toDTO(show);
-    }
+		show.setGenres(genres);
+		Show savedShow = showRepository.save(show);
+		return ShowMapper.toDTO(savedShow);
+	}
 
 	@Transactional(readOnly = true)
 	public ShowDTO getShowById(int id) {
