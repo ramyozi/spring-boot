@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -119,5 +121,14 @@ public class UserAccount {
 	 */
 	public void setAuthorities(List<GrantedAuthority> authorities) {
 		this.authorities = authorities;
+	}
+	
+	public UserDetails asUser() {
+		return User.withDefaultPasswordEncoder()
+				.username(getUsername())
+				.password(getPassword())
+				.authorities(
+						getAuthorities()).build();
+				
 	}
 }
