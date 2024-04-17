@@ -1,8 +1,10 @@
 package fr.diginamic.models;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import fr.diginamic.enums.StatusEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,6 +14,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 @Entity
 @Table(name = "tv_show")
@@ -22,6 +26,9 @@ public class Show {
 
     @Column(length = 100, nullable = false)
     private String title;
+    
+    @Column(length = 512, nullable = true)
+    private String description;
 
     @ManyToMany
     @JoinTable(
@@ -30,6 +37,13 @@ public class Show {
         inverseJoinColumns = @JoinColumn(name = "genre_id")
     )
     private Set<Genre> genres = new HashSet<>();
+
+    @Column(nullable = false)
+    private StatusEnum status;
+    
+    @Temporal(TemporalType.DATE) 
+    private Date releaseDate;
+
 
     // Constructors
     public Show() {}
@@ -72,5 +86,41 @@ public class Show {
     public void removeGenre(Genre genre) {
         genres.remove(genre);
         genre.getShows().remove(this);
+    }
+
+	/** Getter
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/** Setter
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	/** Getter
+	 * @return the status
+	 */
+	public StatusEnum getStatus() {
+		return status;
+	}
+
+	/** Setter
+	 * @param status the status to set
+	 */
+	public void setStatus(StatusEnum status) {
+		this.status = status;
+	}
+	
+	public Date getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(Date releaseDate) {
+        this.releaseDate = releaseDate;
     }
 }

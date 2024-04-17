@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.diginamic.dto.ShowDTO;
+import fr.diginamic.enums.StatusEnum;
 import fr.diginamic.mapper.ShowMapper;
 import fr.diginamic.models.Genre;
 import fr.diginamic.models.Show;
@@ -44,6 +45,16 @@ public class ShowService {
 		}
 
 		show.setGenres(genres);
+		show.setDescription(showDTO.getDescription());
+		try {
+
+			show.setStatus(
+					StatusEnum.valueOf(showDTO.getStatus().toUpperCase()));
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(
+					"Invalid status value: " + showDTO.getStatus());
+		}
+		show.setReleaseDate(showDTO.getReleaseDate());
 		Show savedShow = showRepository.save(show);
 		return ShowMapper.toDTO(savedShow);
 	}
@@ -68,6 +79,15 @@ public class ShowService {
 				.orElseThrow(() -> new RuntimeException(
 						"Show not found: " + showDTO.getId()));
 		existingShow.setTitle(showDTO.getTitle());
+		existingShow.setDescription(showDTO.getDescription());
+		try {
+			existingShow.setStatus(
+					StatusEnum.valueOf(showDTO.getStatus().toUpperCase()));
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(
+					"Invalid status value: " + showDTO.getStatus());
+		}
+		existingShow.setReleaseDate(showDTO.getReleaseDate());
 		Set<Genre> updatedGenres = showDTO.getGenreNames().stream()
 				.map(name -> Optional
 						.ofNullable(genreRepository.findByName(name))

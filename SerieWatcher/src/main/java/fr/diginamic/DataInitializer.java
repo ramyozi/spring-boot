@@ -1,41 +1,47 @@
 package fr.diginamic;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import fr.diginamic.dto.ShowDTO;
-import fr.diginamic.services.ShowService;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-
+import fr.diginamic.models.Genre;
+import fr.diginamic.models.Show;
+import fr.diginamic.repositories.GenreRepository;
+import fr.diginamic.repositories.ShowRepository;
+import fr.diginamic.utils.DataParser;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
 
-	@Autowired
-    private ShowService showService;
+    @Autowired
+    private ShowRepository showRepository;
+
+    @Autowired
+    private GenreRepository genreRepository;
+
+    @Autowired
+    private DataParser dataParser;
 
     @Override
+    @Transactional
     public void run(String... args) throws Exception {
-        createShows();
-    }
-
-    private void createShows() {
-        createShow("Naruto", new String[]{"Action", "Adventure"});
-        createShow("Attack on Titan", new String[]{"Action", "Drama", "Fantasy"});
-        createShow("My Hero Academia", new String[]{"Action", "Comedy", "School"});
-        createShow("One Piece", new String[]{"Action", "Adventure", "Comedy"});
-        createShow("Tokyo Ghoul", new String[]{"Horror", "Mystery", "Supernatural"});
-        createShow("Sword Art Online", new String[]{"Action", "Adventure", "Fantasy"});
-    }
-
-    private void createShow(String title, String[] genres) {
-        ShowDTO showDTO = new ShowDTO();
-        showDTO.setTitle(title);
-        showDTO.setGenreNames(new HashSet<>(Arrays.asList(genres)));
-        showService.createShow(showDTO);
+        List<Show> shows = dataParser.parseShows("classpath:shows.json");
+        for (Show show : shows) {
+            Set<Genre> managedGenres = new HashSet<>();
+            for (Genre genre : show.getGenres()) {
+                Genre managedGenre = genreRepository.findByName(genre.getName());
+                if (managedGenre == null) {
+                    managedGenre = genreRepository.save(genre); 
+                }
+                managedGenres.add(managedGenre);
+            }
+            show.setGenres(managedGenres);
+            showRepository.save(show);
+        }
     }
 }

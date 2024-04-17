@@ -43,7 +43,7 @@ public class ShowController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ShowDTO> updateShow(@PathVariable int id, @RequestBody ShowDTO showDTO) {
-        showDTO.setId(id); // Ensure the ID is set correctly based on the path
+        showDTO.setId(id); 
         ShowDTO updatedShow = showService.updateShow(showDTO);
         return ResponseEntity.ok(updatedShow);
     }

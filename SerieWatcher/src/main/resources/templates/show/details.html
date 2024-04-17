@@ -2,19 +2,31 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title th:text="${show.title}">Show Details</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/global.css}" />
+	<title th:text="${show.title}">Show Details</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/global.css}" />
 </head>
 
 <body>
-    <h1 th:text="${show.title}">Show Title</h1>
-    <div>
-        <h3>Genres</h3>
-        <ul>
-            <li th:each="genreName : ${show.genreNames}" th:text="${genreName}">Genre Name</li>
-        </ul>
-    </div>
-    <a th:href="@{/show/list}">Back to list</a>
+	<h1 th:text="${show.title}">Show Title</h1>
+	<div>
+		<h3>Description</h3>
+		<p th:text="${show.description}">Default Description</p>
+	</div>
+	<div>
+		<h3>Status</h3>
+		<p th:text="${show.status}">Status</p>
+	</div>
+	<div>
+		<h3>Release Date</h3>
+		<p th:text="${#dates.format(show.releaseDate, 'yyyy-MM-dd')}">Release Date</p>
+	</div>
+	<div>
+		<h3>Genres</h3>
+		<ul>
+			<li th:each="genreName : ${show.genreNames}" th:text="${genreName}">Genre Name</li>
+		</ul>
+	</div>
+	<a th:href="@{/shows/list}">Back to list</a>
 </body>
 
 </html>

@@ -8,7 +8,7 @@
 
 <body>
 	<h1>Create New Show</h1>
-	<form id="addShowForm" action="#" th:action="@{/show/add}" th:object="${show}" method="post">
+	<form id="addShowForm" action="#" th:action="@{/shows/add}" th:object="${show}" method="post">
 		<div>
 			<label for="title">Name:</label>
 			<input type="text" id="title" th:field="*{title}" required />
@@ -21,11 +21,27 @@
 			</datalist>
 		</div>
 		<div>
+			<label for="description">Description:</label>
+			<textarea id="description" th:field="*{description}" required></textarea>
+		</div>
+		<div>
+			<label for="status">Status:</label>
+			<select id="status" th:field="*{status}">
+				<option value="COMPLETED">Completed</option>
+				<option value="PAUSED">Paused</option>
+				<option value="PLAN_TO_WATCH">Plan to Watch</option>
+				<option value="WATCHING">Watching</option>
+			</select>
+		</div>
+		<div>
+			<label for="releaseDate">Release Date:</label>
+			<input type="date" id="releaseDate" th:field="*{releaseDate}" required />
+		</div>
+		<div>
 			<button type="submit">Create Show</button>
 		</div>
 	</form>
-	<a th:href="@{/show/list}">Back to list</a>
-
+	<a th:href="@{/shows/list}">Back to list</a>
 </body>
 
 </html>
