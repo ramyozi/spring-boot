@@ -27,6 +27,9 @@ public class Show {
     @Column(length = 100, nullable = false)
     private String title;
     
+    @Column(length = 100, nullable = true)
+    private String imageUrl;
+    
     @Column(length = 512, nullable = true)
     private String description;
 
@@ -123,4 +126,20 @@ public class Show {
     public void setReleaseDate(Date releaseDate) {
         this.releaseDate = releaseDate;
     }
+
+	/** Getter
+	 * @return the imageUrl
+	 */
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	/** Setter
+	 * @param imageUrl the imageUrl to set
+	 */
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+    
+    
 }

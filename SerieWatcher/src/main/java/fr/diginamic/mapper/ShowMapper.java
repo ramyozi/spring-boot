@@ -17,7 +17,7 @@ public class ShowMapper {
 		}
 		Set<String> genreNames = show.getGenres().stream()
 				.map(Genre::getName).collect(Collectors.toSet());
-		return new ShowDTO(show.getId(), show.getTitle(), genreNames,
+		return new ShowDTO(show.getId(), show.getTitle(), show.getImageUrl(), genreNames,
 				show.getDescription(), show.getStatus().name(),
 				show.getReleaseDate());
 	}

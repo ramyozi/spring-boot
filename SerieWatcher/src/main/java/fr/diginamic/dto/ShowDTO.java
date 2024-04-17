@@ -1,12 +1,12 @@
 package fr.diginamic.dto;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
 public class ShowDTO {
 	private int id;
 	private String title;
+	private String imageUrl;
 	private String description;
 	private Set<String> genreNames;
 	private String status;
@@ -16,10 +16,12 @@ public class ShowDTO {
 	public ShowDTO() {
 	}
 
-	public ShowDTO(int id, String title, Set<String> genreNames,
-			String description, String status, Date releaseDate) {
+	public ShowDTO(int id, String title, String imageUrl,
+			Set<String> genreNames, String description, String status,
+			Date releaseDate) {
 		this.id = id;
 		this.title = title;
+		this.imageUrl = imageUrl;
 		this.genreNames = genreNames;
 		this.description = description;
 		this.status = status;
@@ -103,6 +105,20 @@ public class ShowDTO {
 	 */
 	public void setReleaseDate(Date releaseDate) {
 		this.releaseDate = releaseDate;
+	}
+
+	/** Getter
+	 * @return the imageUrl
+	 */
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	/** Setter
+	 * @param imageUrl the imageUrl to set
+	 */
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
 }

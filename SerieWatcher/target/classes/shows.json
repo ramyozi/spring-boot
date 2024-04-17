@@ -4,69 +4,79 @@
         "description": "A high school chemistry teacher turned methamphetamine manufacturing drug dealer teams with a former student.",
         "genres": ["Crime", "Drama", "Thriller"],
         "status": "COMPLETED",
-        "releaseDate": "2008-01-20"
+        "releaseDate": "2008-01-20",
+        "imageUrl": "https://i.pinimg.com/564x/37/62/75/37627587496965efcc0ae42ac9dff525.jpg"
     },
     {
         "title": "Game of Thrones",
         "description": "Nine noble families fight for control over the mythical lands of Westeros, while an ancient enemy returns after being dormant for millennia.",
         "genres": ["Drama", "Fantasy", "Adventure"],
         "status": "COMPLETED",
-        "releaseDate": "2011-04-17"
+        "releaseDate": "2011-04-17",
+        "imageUrl": "https://i.pinimg.com/564x/03/f5/96/03f596203a988fb80a6fd725185365ad.jpg"
     },
     {
         "title": "The Mandalorian",
         "description": "A lone bounty hunter in the outer reaches of the galaxy, far from the authority of the New Republic.",
         "genres": ["Action", "Adventure", "Fantasy"],
         "status": "WATCHING",
-        "releaseDate": "2019-11-12"
+        "releaseDate": "2019-11-12",
+        "imageUrl": "https://i.pinimg.com/736x/b5/ff/5a/b5ff5ab5cfcb80996dacc5baae757352.jpg"
     },
     {
         "title": "Stranger Things",
         "description": "When a young boy disappears, his mother, a police chief, and his friends must confront terrifying supernatural forces in order to get him back.",
         "genres": ["Drama", "Fantasy", "Horror"],
         "status": "WATCHING",
-        "releaseDate": "2016-07-15"
+        "releaseDate": "2016-07-15",
+        "imageUrl": "https://i.pinimg.com/564x/7a/b4/d6/7ab4d616e2fbc2a2be5c1b791aee143c.jpg"
     },
     {
         "title": "Sherlock",
         "description": "A modern update finds the famous sleuth and his doctor partner solving crime in 21st century London.",
         "genres": ["Crime", "Drama", "Mystery"],
         "status": "COMPLETED",
-        "releaseDate": "2010-07-25"
+        "releaseDate": "2010-07-25",
+        "imageUrl": "https://i.pinimg.com/564x/3f/11/cb/3f11cba2902e5e04dbde8da75eafe4f4.jpg"
     },
     {
         "title": "The Witcher",
         "description": "Geralt of Rivia, a solitary monster hunter, struggles to find his place in a world where people often prove more wicked than beasts.",
         "genres": ["Action", "Adventure", "Drama"],
         "status": "WATCHING",
-        "releaseDate": "2019-12-20"
+        "releaseDate": "2019-12-20",
+        "imageUrl": "https://i.pinimg.com/564x/9a/ab/e8/9aabe8e47cc2c3ba25aacce0eec67141.jpg"
     },
     {
         "title": "Black Mirror",
         "description": "An anthology series exploring a twisted, high-tech multiverse where humanity's greatest innovations and darkest instincts collide.",
         "genres": ["Drama", "Sci-Fi", "Thriller"],
         "status": "COMPLETED",
-        "releaseDate": "2011-12-04"
+        "releaseDate": "2011-12-04",
+        "imageUrl": "https://i.pinimg.com/564x/87/ac/7f/87ac7f158380dc39e4e4adca2a1afb8a.jpg"
     },
     {
         "title": "Westworld",
         "description": "Set at the intersection of the near future and the reimagined past, explore a world in which every human appetite can be indulged without consequence.",
         "genres": ["Drama", "Mystery", "Sci-Fi"],
         "status": "PAUSED",
-        "releaseDate": "2016-10-02"
+        "releaseDate": "2016-10-02",
+        "imageUrl": "https://i.pinimg.com/564x/79/90/cc/7990ccb196197db2333435890038b939.jpg"
     },
     {
         "title": "Ozark",
         "description": "A financial planner relocates his family to the Ozarks after a money laundering scheme goes wrong, and he must pay off a debt to a Mexican drug lord.",
         "genres": ["Crime", "Drama", "Thriller"],
         "status": "WATCHING",
-        "releaseDate": "2017-07-21"
+        "releaseDate": "2017-07-21",
+        "imageUrl": "https://i.pinimg.com/564x/e4/1f/92/e41f9217b23d3eda436c93384bfb0250.jpg"
     },
     {
         "title": "Better Call Saul",
         "description": "The trials and tribulations of criminal lawyer, Jimmy McGill, in the time leading up to establishing his strip-mall law office in Albuquerque, New Mexico.",
         "genres": ["Crime", "Drama"],
         "status": "WATCHING",
-        "releaseDate": "2015-02-08"
+        "releaseDate": "2015-02-08",
+        "imageUrl": "https://i.pinimg.com/564x/08/ec/93/08ec933a52a605e20a2761b61ac1086b.jpg"
     }
 ]

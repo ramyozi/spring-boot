@@ -45,6 +45,7 @@ public class ShowService {
 		}
 
 		show.setGenres(genres);
+		show.setImageUrl(showDTO.getImageUrl());
 		show.setDescription(showDTO.getDescription());
 		try {
 
@@ -79,6 +80,7 @@ public class ShowService {
 				.orElseThrow(() -> new RuntimeException(
 						"Show not found: " + showDTO.getId()));
 		existingShow.setTitle(showDTO.getTitle());
+		existingShow.setImageUrl(showDTO.getImageUrl());
 		existingShow.setDescription(showDTO.getDescription());
 		try {
 			existingShow.setStatus(
