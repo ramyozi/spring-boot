@@ -8,6 +8,13 @@
 
 <body>
 	<h1>Welcome to the City Manager</h1>
+	<div th:if="${username}">
+        <h2>Welcome <span th:text="${username} + ' (' + ${roles} + ')'">User (Role)</span>!</h2>
+    </div>
+    <div th:unless="${username}">
+        <h2>Welcome Guest!</h2>
+    </div>
+
 	<a th:href="@{/city/list}">List Cities</a>
 	<a th:href="@{/city/add}">Add New City</a>
 </body>

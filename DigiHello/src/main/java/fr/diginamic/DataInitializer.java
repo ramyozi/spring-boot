@@ -24,14 +24,14 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
     	UserAccount a = new UserAccount(
-    				"admin",
-    				"admin",
+    				"Luffy",
+    				"Luffy",
     				"ADMIN"
     			);
     	
     	UserAccount b = new UserAccount(
-				"user",
-				"user",
+				"Zorro",
+				"Zorro",
 				"USER"
 			);
     	
