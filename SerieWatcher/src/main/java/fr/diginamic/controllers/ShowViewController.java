@@ -30,22 +30,6 @@ public class ShowViewController {
 	private ShowService showService;
 	@Autowired
 	private GenreService genreService;
-	
-	@GetMapping("/")
-	public ModelAndView index() {
-		Authentication authentication = SecurityContextHolder.getContext()
-				.getAuthentication();
-		Map<String, Object> model = new HashMap<>();
-		if (authentication != null && authentication.isAuthenticated()) {
-			String username = authentication.getName();
-			String roles = authentication.getAuthorities().stream()
-					.map(GrantedAuthority::getAuthority)
-					.collect(Collectors.joining(", "));
-			model.put("username", username);
-			model.put("roles", roles);
-		}
-		return new ModelAndView("index", model);
-	}
 
 	@GetMapping("/show/details/{id}")
 	public ModelAndView showDetails(@PathVariable("id") int id) {

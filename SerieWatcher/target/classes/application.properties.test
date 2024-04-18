@@ -2,12 +2,12 @@ spring.application.name=SerieWatcher
 
 #---------- JDBC ----------
 spring.datasource.url=jdbc:mariadb://localhost:3306/seriewatcher
-spring.datasource.username=root
+spring.datasource.username=
 spring.datasource.password=
 spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
 
 #---------- JPA ----------
-# Pour droper et créer la base de données à chaque démarrage :
+# Pour droper et crÃ©er la base de donnÃ©es Ã  chaque dÃ©marrage :
 spring.jpa.hibernate.ddl-auto=create-drop
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
@@ -17,3 +17,9 @@ spring.profiles.active=dev
 
 #---------- ThymeLeaf (Templating) ----------
 spring.thymeleaf.cache = false
+
+#===============================
+#GOOGLE OAuth2
+#===============================
+spring.security.oauth2.client.registration.google.client-id=
+spring.security.oauth2.client.registration.google.client-secret=
