@@ -3,18 +3,24 @@ package fr.diginamic.controllers;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import fr.diginamic.dto.GenreDTO;
 import fr.diginamic.dto.ShowDTO;
+import fr.diginamic.mapper.ShowMapper;
 import fr.diginamic.services.GenreService;
 import fr.diginamic.services.ShowService;
 
@@ -24,6 +30,22 @@ public class ShowViewController {
 	private ShowService showService;
 	@Autowired
 	private GenreService genreService;
+	
+	@GetMapping("/")
+	public ModelAndView index() {
+		Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
+		Map<String, Object> model = new HashMap<>();
+		if (authentication != null && authentication.isAuthenticated()) {
+			String username = authentication.getName();
+			String roles = authentication.getAuthorities().stream()
+					.map(GrantedAuthority::getAuthority)
+					.collect(Collectors.joining(", "));
+			model.put("username", username);
+			model.put("roles", roles);
+		}
+		return new ModelAndView("index", model);
+	}
 
 	@GetMapping("/show/details/{id}")
 	public ModelAndView showDetails(@PathVariable("id") int id) {
@@ -67,4 +89,20 @@ public class ShowViewController {
 			return "show/add";
 		}
 	}
+	
+	@PostMapping("/show/delete/{id}")
+	public String deleteCity(@PathVariable int id) {
+		showService.deleteShow(id);
+		return "redirect:/show/list";
+	}
+	
+	@PutMapping("/show/update/{id}")
+    public String updateShow(@ModelAttribute ShowDTO show) {
+        try {
+            showService.updateShow(show); 
+            return "redirect:/show/details/" + show.getId();
+        } catch (Exception e) {
+            return "redirect:/show/details/" + show.getId() + "?error";
+        }
+    }
 }

@@ -7,9 +7,19 @@
 </head>
 
 <body>
+	<div th:replace="components/header :: header"></div>
+
 	<h1>Welcome to the show Manager</h1>
-	<a th:href="@{/show/list}">List shows</a>
-	<a th:href="@{/show/add}">Add New show</a>
+
+	<div th:if="${username}">
+		<h2>Welcome <span th:text="${username} + ' (' + ${roles} + ')'">User (Role)</span>!</h2>
+	</div>
+	<div th:unless="${username}">
+		<h2>Welcome Guest!</h2>
+	</div>
+
+	<div th:replace="components/footer :: footer"></div>
+
 </body>
 
 </html>
