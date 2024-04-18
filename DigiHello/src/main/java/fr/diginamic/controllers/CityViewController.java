@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -38,20 +39,28 @@ public class CityViewController {
 				.getAuthentication();
 		Map<String, Object> model = new HashMap<>();
 		if (authentication != null && authentication.isAuthenticated()) {
-            String username = authentication.getName();
-            String roles = authentication.getAuthorities().stream()
-                                        .map(GrantedAuthority::getAuthority)
-                                        .collect(Collectors.joining(", "));
-            model.put("username", username);
-            model.put("roles", roles);
+			String username = authentication.getName();
+			String roles = authentication.getAuthorities().stream()
+					.map(GrantedAuthority::getAuthority)
+					.collect(Collectors.joining(", "));
+			model.put("username", username);
+			model.put("roles", roles);
 		}
 		return new ModelAndView("index", model);
 	}
 
 	@GetMapping("/city/list")
 	public ModelAndView getCities() {
+		Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
 		Map<String, Object> model = new HashMap<>();
 		model.put("cities", cityService.extractCities());
+		String username = authentication.getName();
+		String roles = authentication.getAuthorities().stream()
+				.map(GrantedAuthority::getAuthority)
+				.collect(Collectors.joining(", "));
+		model.put("username", username);
+		model.put("roles", roles);
 		return new ModelAndView("city/list", model);
 	}
 
@@ -85,5 +94,11 @@ public class CityViewController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body("An error occurred");
 		}
+	}
+
+	@PostMapping("/city/delete/{id}")
+	public String deleteCity(@PathVariable int id) {
+		cityService.deleteCity(id);
+		return "redirect:/city/list";
 	}
 }

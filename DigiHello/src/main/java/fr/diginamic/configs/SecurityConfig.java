@@ -40,7 +40,7 @@ public class SecurityConfig {
 						.requestMatchers(HttpMethod.GET, "city/**",
 								"/city/list")
 						.authenticated()
-						.requestMatchers(HttpMethod.POST, "city/**")
+	                    .requestMatchers(HttpMethod.POST,"city/**", "/city/add", "/city/delete/**")
 						.hasAuthority("ROLE_ADMIN")
 						.requestMatchers("/admin").hasRole("ADMIN")
 						.anyRequest().denyAll())

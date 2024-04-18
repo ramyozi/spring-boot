@@ -26,24 +26,26 @@ public class DataInitializer implements CommandLineRunner {
     	UserAccount a = new UserAccount(
     				"Luffy",
     				"Luffy",
-    				"ADMIN"
+    				"ROLE_ADMIN"
     			);
     	
     	UserAccount b = new UserAccount(
 				"Zorro",
 				"Zorro",
-				"USER"
+				"ROLE_USER"
 			);
     	
     	UserAccount c = new UserAccount(
 				"test",
 				"test",
-				"USER"
+				"ROLE_USER"
 			);
     	
     	userAccountRepository.save(a);
     	userAccountRepository.save(b);
     	userAccountRepository.save(c);
+    	
+    	cityService.initData();
     	
     }
    

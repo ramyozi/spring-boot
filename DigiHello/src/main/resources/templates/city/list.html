@@ -1,28 +1,36 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Cities List</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/global.css}" />
+	<title>Cities List</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/global.css}" />
 </head>
+
 <body>
-    <h1>Cities List</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Population</th>
-                <th>Department Code</th>
-                <th>Department Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="city : ${cities}">
-                <td th:text="${city.name}">City Name</td>
-                <td th:text="${city.population}">Population</td>
-                <td th:text="${city.departement.code}">Department Code</td>
-                <td th:text="${city.departement.name}">Department Name</td>
-            </tr>
-        </tbody>
-    </table>
+	<h1>Cities List</h1>
+	<table>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Population</th>
+				<th>Department Code</th>
+				<th>Department Name</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="city : ${cities}">
+				<td th:text="${city.name}">City Name</td>
+				<td th:text="${city.population}">Population</td>
+				<td th:text="${city.departement.code}">Department Code</td>
+				<td th:text="${city.departement.name}">Department Name</td>
+				<td th:if="${roles.contains('ROLE_ADMIN')}" >
+					<form th:action="@{'/city/delete/' + ${city.id}}" method="post">
+						<button type="submit">Delete</button>
+					</form>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 </body>
+
 </html>
