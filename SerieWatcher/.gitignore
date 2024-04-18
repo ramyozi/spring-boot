@@ -1,0 +1,5 @@
+# Environment variables
+.env
+
+# Local configuration
+application.properties
