@@ -18,7 +18,7 @@ import fr.diginamic.dto.GenreDTO;
 import fr.diginamic.services.GenreService;
 
 @RestController
-@RequestMapping("/api/genres")
+@RequestMapping("/genres")
 public class GenreController {
 
     @Autowired
