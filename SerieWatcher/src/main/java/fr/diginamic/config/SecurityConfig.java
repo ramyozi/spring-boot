@@ -7,29 +7,39 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import fr.diginamic.models.UserAccount;
 import fr.diginamic.repositories.UserAccountRepository;
+import fr.diginamic.services.CustomOidcUserService;
 
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
 
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        UserDetailsManager userDetailsManager = new InMemoryUserDetailsManager();
-//        userDetailsManager.createUser(User.withDefaultPasswordEncoder().username("user").password("user").roles("USER").build());
-//        userDetailsManager.createUser(User.withDefaultPasswordEncoder().username("admin").password("admin").roles("ADMIN").build());
-//        return userDetailsManager;
-//    }
-
 	@Bean
-	UserDetailsService userDetailsService(
+	public UserDetailsService userDetailsService(
 			UserAccountRepository userAccountRepository) {
-		return username -> userAccountRepository.findByUsername(username)
-				.asUser();
+		return username -> {
+			UserAccount account = userAccountRepository
+					.findByUsername(username);
+			if (account == null) {
+				throw new UsernameNotFoundException("User not found");
+			}
+			return account.asUser();
+		};
+
 	}
 
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http)
 			throws Exception {
 		http.authorizeHttpRequests(request -> request
@@ -45,6 +55,10 @@ public class SecurityConfig {
 				.httpBasic(Customizer.withDefaults())
 				.oauth2Login(Customizer.withDefaults());
 		return http.build();
+	}
+
+	private CustomOidcUserService oidcUserService() {
+		return new CustomOidcUserService();
 	}
 
 }

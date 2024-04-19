@@ -1,13 +1,13 @@
 package fr.diginamic.models;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -19,38 +19,27 @@ import jakarta.persistence.Id;
 @Entity
 public class UserAccount {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	private String username;
-	private String password;
-	@ElementCollection(fetch = FetchType.EAGER)
-	List<GrantedAuthority> authorities = new ArrayList<>();
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    private String username;
+    private String password;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles;
 
-	/**
-	 * Constructeur
-	 * 
-	 */
-	public UserAccount() {
-		super();
-	}
+    public UserAccount() {}
 
-	/**
-	 * Constructeur
-	 * 
-	 * @param username
-	 * @param password
-	 * @param authorities
-	 */
-	public UserAccount(String username, String password,
-			String... authorities) {
-		super();
-		this.username = username;
-		this.password = password;
-		this.authorities = Arrays.stream(authorities)
-				.map(SimpleGrantedAuthority::new)
-				.map(GrantedAuthority.class::cast).toList();
-	}
+    public UserAccount(String username, String password, String... roles) {
+        this.username = username;
+        this.password = (password == null || password.startsWith("{")) ? password : new BCryptPasswordEncoder().encode(password);
+        this.roles = List.of(roles);
+    }
 
+    public UserDetails asUser() {
+        List<GrantedAuthority> authorities = roles.stream()
+            .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+            .collect(Collectors.toList());
+        return new User(username, password, authorities);
+    }
 	/**
 	 * Getter
 	 * 
@@ -105,30 +94,18 @@ public class UserAccount {
 		this.password = password;
 	}
 
-	/**
-	 * Getter
-	 * 
-	 * @return the authorities
+
+	/** Getter
+	 * @return the roles
 	 */
-	public List<GrantedAuthority> getAuthorities() {
-		return authorities;
+	public List<String> getRoles() {
+		return roles;
 	}
 
-	/**
-	 * Setter
-	 * 
-	 * @param authorities the authorities to set
+	/** Setter
+	 * @param roles the roles to set
 	 */
-	public void setAuthorities(List<GrantedAuthority> authorities) {
-		this.authorities = authorities;
-	}
-	
-	public UserDetails asUser() {
-		return User.withDefaultPasswordEncoder()
-				.username(getUsername())
-				.password(getPassword())
-				.authorities(
-						getAuthorities()).build();
-				
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
 	}
 }

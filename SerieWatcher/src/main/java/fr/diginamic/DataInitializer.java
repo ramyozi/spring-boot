@@ -38,19 +38,19 @@ public class DataInitializer implements CommandLineRunner {
     	UserAccount a = new UserAccount(
 				"Luffy",
 				"Luffy",
-				"ROLE_ADMIN"
+				"ADMIN"
 			);
 	
 	UserAccount b = new UserAccount(
 			"Zorro",
 			"Zorro",
-			"ROLE_USER"
+			"USER"
 		);
 	
 	UserAccount c = new UserAccount(
 			"test",
 			"test",
-			"ROLE_USER"
+			"USER"
 		);
 	
 	userAccountRepository.save(a);
