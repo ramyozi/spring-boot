@@ -2,24 +2,31 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<title>Index Page</title>
+	<title th:text="#{title}">Index Page</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/global.css}" />
 </head>
 
 <body>
-	<div th:replace="components/header :: header"></div>
-
-	<h1>Welcome to the show Manager</h1>
+	<ul>
+		<li><a th:href="@{/}">Home</a></li>
+		<li><a th:href="@{/show/list}">Show List</a></li>
+		<li>
+			<select onchange="window.location.href='?lang=' + this.value">
+				<option value="en" th:selected="${#locale.toString() == 'en'}" th:text="#{language.en}">English</option>
+				<option value="ko" th:selected="${#locale.toString() == 'ko'}" th:text="#{language.ko}">Korean</option>
+			</select>
+		</li>
+	</ul>
+	<h1 th:text="${welcomeMessage}">Welcome to the Show Manager</h1>
 
 	<div th:if="${username}">
 		<h2>Welcome <span th:text="${username} + ' (' + ${roles} + ')'">User (Role)</span>!</h2>
 	</div>
 	<div th:unless="${username}">
-		<h2>Welcome Guest!</h2>
+		<h2 th:text="#{welcome.guest}">Welcome Guest!</h2>
 	</div>
 
 	<div th:replace="components/footer :: footer"></div>
-
 </body>
 
 </html>

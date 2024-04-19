@@ -12,6 +12,14 @@
 				<ul>
 					<li><a th:href="@{/}">Home</a></li>
 					<li><a th:href="@{/show/list}">Show List</a></li>
+					<li>
+						<select onchange="window.location.href='?lang=' + this.value">
+							<option th:each="lang : ${#arrays.array('en', 'fr', 'ko')}"
+									th:text="#{${'language.' + lang}}"
+									th:value="${lang}"
+									th:selected="${lang == #locale.language}">English</option>
+						</select>
+					</li>
 				</ul>
 			</nav>
 		</header>
