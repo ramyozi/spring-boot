@@ -35,24 +35,20 @@ public class CustomOidcUserService extends OidcUserService {
 
 	private OidcUser processOidcUser(OidcUser oidcUser,
 			OidcUserRequest userRequest) {
-		// Extract the principal's email or other identifier used as username in your DB
 		String email = oidcUser.getEmail();
 		UserAccount userAccount = userAccountRepository
 				.findByUsername(email);
 		if (userAccount == null) {
-			// Create a new user if it doesn't exist
-			String[] defaultRoles = { "USER" }; // Default roles
-			userAccount = new UserAccount(email, "{noop}", defaultRoles); // Password is not needed for OAuth2 users
+			String[] defaultRoles = { "USER" }; 
+			userAccount = new UserAccount(email, "{noop}", defaultRoles);
 			userAccountRepository.save(userAccount);
 		}
 
-		// Map to granted authorities
 		Set<GrantedAuthority> mappedAuthorities = userAccount.getRoles()
 				.stream()
 				.map(role -> new SimpleGrantedAuthority("ROLE_" + role))
 				.collect(Collectors.toSet());
 
-		// Update the OIDC user details with mapped authorities
 		return new DefaultOidcUser(mappedAuthorities,
 				oidcUser.getIdToken(), oidcUser.getUserInfo());
 	}

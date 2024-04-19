@@ -1,5 +1,6 @@
 package fr.diginamic.controllers;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -66,7 +67,12 @@ public class ShowViewController {
 
 	@GetMapping("/show/add")
 	public ModelAndView addShowForm() {
-		return new ModelAndView("show/add", "show", new ShowDTO());
+		ModelAndView mav = new ModelAndView("show/add");
+		List<String> statuses = Arrays.asList("COMPLETED", "PAUSED",
+				"PLAN_TO_WATCH", "WATCHING");
+		mav.addObject("statuses", statuses);
+		mav.addObject("show", new ShowDTO());
+		return mav;
 	}
 
 	@PostMapping("/show/add")
@@ -112,9 +118,8 @@ public class ShowViewController {
 					.collect(Collectors.joining(", "));
 			model.put("username", username);
 			model.put("roles", roles);
-			model.put("welcomeMessage",
-					messageSource.getMessage("welcome.title",
-							new Object[] { username }, locale));
+			model.put("welcomeMessage", messageSource.getMessage(
+					"welcome.title", new Object[] { username }, locale));
 		} else {
 			model.put("welcomeMessage", messageSource
 					.getMessage("welcome.guest", null, locale));

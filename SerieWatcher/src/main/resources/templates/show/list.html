@@ -2,36 +2,35 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<title>Cities List</title>
+	<title th:text="#{show.list.title}"></title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/global.css}" />
 </head>
 
 <body>
 	<div th:replace="components/header :: header"></div>
 	<div class="container">
-		<h1>Shows List</h1>
+		<h1 th:text="#{show.list.heading}">Shows List</h1>
 		<table>
 			<thead>
 				<tr>
-					<th>title</th>
-					<th>status</th>
-					<th>action</th>
+					<th th:text="#{show.list.column.title}">Title</th>
+					<th th:text="#{show.list.column.status}">Status</th>
+					<th th:text="#{show.list.column.action}">Action</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="show : ${shows}">
 					<td th:text="${show.title}">Show title</td>
-					<td th:text="${show.status}">Show status</td>
+					<td th:text="#{${'status.' + show.status} ?: 'Default status message'}">Show status</td>
 					<td>
-						<a th:href="@{/show/details/{id}(id=${show.id})}">View Details</a>
+						<a th:href="@{/show/details/{id}(id=${show.id})}" th:text="#{show.details.title}">View
+							Details</a>
 					</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
-
 	<div th:replace="components/footer :: footer"></div>
-
 </body>
 
 </html>

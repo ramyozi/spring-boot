@@ -10,14 +10,14 @@
 		<header>
 			<nav>
 				<ul>
-					<li><a th:href="@{/}">Home</a></li>
-					<li><a th:href="@{/show/list}">Show List</a></li>
+					<li><a th:href="@{/}" th:text="#{nav.home}">Home</a></li>
+					<li><a th:href="@{/show/list}" th:text="#{nav.showList}">Show List</a></li>
 					<li>
 						<select onchange="window.location.href='?lang=' + this.value">
-							<option th:each="lang : ${#arrays.array('en', 'fr', 'ko')}"
-									th:text="#{${'language.' + lang}}"
-									th:value="${lang}"
-									th:selected="${lang == #locale.language}">English</option>
+							<option value="en" th:selected="${#locale.toString() == 'en'}" th:text="#{language.en}">
+								English</option>
+							<option value="ko" th:selected="${#locale.toString() == 'ko'}" th:text="#{language.ko}">
+								Korean</option>
 						</select>
 					</li>
 				</ul>
