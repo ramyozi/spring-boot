@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import fr.diginamic.config.TranslationService;
 import fr.diginamic.dto.GenreDTO;
 import fr.diginamic.dto.ShowDTO;
 import fr.diginamic.services.GenreService;
@@ -38,13 +39,19 @@ public class ShowViewController {
 	@Autowired
 	private MessageSource messageSource;
 
+	@Autowired
+	private TranslationService translationService;
+
 	@GetMapping("/show/details/{id}")
 	public ModelAndView showDetails(@PathVariable("id") int id) {
 		ModelAndView mav = new ModelAndView();
 		try {
 			ShowDTO showDTO = showService.getShowById(id);
-			mav.setViewName("show/details");
+			String translatedDescription = translationService
+					.translateText(showDTO.getDescription(), "en", "ko"); // Translating from English to Korean
+			showDTO.setDescription(translatedDescription);
 			mav.addObject("show", showDTO);
+			mav.setViewName("show/details");
 		} catch (Exception e) {
 			mav.setViewName("error");
 			mav.addObject("message",
